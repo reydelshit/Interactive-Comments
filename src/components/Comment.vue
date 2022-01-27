@@ -4,11 +4,11 @@
     <div class="comments__container">
         <div class="comments__upvotes">
             <span>{{comment.score}}</span>
-
         </div>
       
         <div class="comments__descriptions">
             <span class="username">
+                <img :src="require('@/assets/images/avatars/' + comment.user.image.png)" alt="username-icon">
                 <h1>{{comment.user.username}}</h1>
                 <p>{{comment.createdAt}}</p>
             </span>
