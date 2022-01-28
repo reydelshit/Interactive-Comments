@@ -2,9 +2,9 @@
   <div class="comments" v-for="comment in comments" :key="comment.id">  
     <div class="comments__container">
         <div class="comments__upvotes">
-                <span class="upvotes__icon">+</span>
-            <span>{{comment.score}}</span>
-                <span class="upvotes__icon">-</span>
+                <span class="upvotes__icon" @click="comment.score++">+</span>
+                <span>{{comment.score}}</span>
+                <span class="upvotes__icon" @click="comment.score--">-</span>
         </div>  
         <div class="comments__descriptions">
             <div class="comments__inside">
@@ -13,47 +13,27 @@
                     <span>{{comment.user.username}}</span>
                     <span>{{comment.createdAt}}</span>
                 </span>
-                <div class="reply">
+                <div @click="replyModal(comment.id)" class="reply__icon">
                     <img src="../assets/images/icon-reply.svg" alt="reply-icon">
                     <span>Reply</span>
                 </div>
             </div>
             <p>{{comment.content}}</p>
         </div>
-     
       <!-- ================== -->
-
-    <!-- <div class="mother father">
-        <div class="comments replies" v-for="com in comment.replies" :key="com.id">
-            <div class="comments__container">
-                <div class="comments__upvotes">
-                    <button><img src="../assets/images/icon-plus.svg" alt=""></button>
-                    <span>{{com.score}}</span>
-                    <button><img src="../assets/images/icon-minus.svg" alt=""></button>
-                </div>
-                <div class="comments__descriptions">
-                    <div class="comments__inside">
-                        <span class="username__replies">
-                            <img :src="require('@/assets/images/avatars/' + com.user.image.png)" alt="username-icon">
-                            <span>{{com.user.username}}</span>
-                            <span>{{com.createdAt}}</span>
-                        </span>
-                        <div class="reply">
-                            reply
-                        </div>
-                    </div>
-                    <h1>{{com.content}}</h1>
-                </div>
-            </div>
-        </div>
-    </div>     -->
   </div>
-    <div class="replies" v-if="comment.replies">
-        <div class="replies__container" v-for="com in comment.replies" :key="com.id">
+    <div class="comments" v-if="renderReply === comment.id">
+        <button @click="close">cclose</button>
+        <div class="comments__container">
+        <input type="text">
+        </div>
+    </div>
+    <div class="replies" v-for="com in comment.replies" :key="com.id">
+        <div class="replies__container">
             <div class="comments__upvotes">
-                <span class="upvotes__icon">+</span>
+                <span class="upvotes__icon" @click="com.score++">+</span>
                 <span>{{com.score}}</span>
-                <span class="upvotes__icon">-</span>
+                <span class="upvotes__icon" @click="com.score--">-</span>
             </div> 
         <div class="comments__descriptions">
             <div class="comments__inside">
@@ -62,13 +42,20 @@
                     <span>{{com.user.username}}</span>
                     <span>{{com.createdAt}}</span>
                 </span>
-                <div class="reply">
+                <div @click="replyM(com.id)" class="reply__icon" >
                     <img src="../assets/images/icon-reply.svg" alt="reply-icon">
                     <span>Reply</span>
                 </div>
             </div>
-            <p>{{comment.content}}</p>
+            <p>{{com.content}}</p>
         </div>
+
+     </div>
+        <div class="replies__container" v-if="renderRep === com.id">
+            <button @click="closee">cclose</button>
+            <div class="comments__container">
+                <input type="text">
+            </div>
         </div>
     </div>
 </div>
@@ -76,8 +63,34 @@
 </template>
 
 <script>
+// import { ref } from '@vue/reactivity'
+
 export default {
-    props: ['comments']
+    props: ['comments'],
+    data(){
+        return{
+            renderReply: null,
+            renderRep: null
+        }
+    },
+    methods: {
+        replyModal(e){
+            if(e === e){
+                this.renderReply = e
+            }
+        },
+        close(){
+            this.renderReply = !this.renderReply
+        },
+        replyM(w){
+            if(w === w){
+                this.renderRep = w
+            }
+        },
+        closee(){
+            this.renderRep = !this.renderRep
+        }
+    }
 }
 </script>
 
@@ -87,7 +100,6 @@ export default {
 :root{
 
     --rubik: 'Rubik', sans-serif;
-
   --Moderate-blue: hsl(238, 40%, 52%);
   --Soft-Red: hsl(358, 79%, 66%);
   --Light-grayish-blue: hsl(239, 57%, 85%);
@@ -120,8 +132,8 @@ p{
     flex-direction: row;
     align-items: center;
     background: var(--White);
-    margin-bottom: 2rem;
-    padding: 1em;
+    margin-bottom: 1rem;
+    padding: 1.5em;
     border-radius: 7px;
 
 
@@ -134,8 +146,8 @@ p{
     align-items: center;
     justify-content: space-evenly;
 
-    width: 5rem;    
-    height: 5rem;
+    width: 3rem;    
+    height: 6rem;
     border-radius: 8px;
     background: var(--Very-light-gray);
     color: var(--Moderate-blue);
@@ -158,6 +170,7 @@ p{
     display: block;
     padding: 1.8em 2em;
     text-align: start;
+    width: 100%;
 }
 
 .comments__inside{
@@ -180,27 +193,28 @@ p{
 
 
 
-.username img, .username__replies img {
+.username img{
     width: 2rem;
 }
 
 .username > :nth-child(2){
-    font-weight: bold;
+    font-weight: 500;
 }
 .username > :nth-child(3){
     font-size: 0.8rem;
 }
 
-.reply{
+.reply__icon{
     display: flex;
     align-items: center;
 }
 
-.reply > *{
+.reply__icon > *{
     margin-right: 1em;
-    font-size: 1.5em;
-    font-weight: bold;
+    font-size: 1rem;
+    font-weight: 500;
     color: var(--Moderate-blue);
+    cursor: pointer;
 }
 
 .replies {
@@ -218,7 +232,7 @@ p{
     align-items: center;
     width: 40rem;
     background: var(--White);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     padding: 1em;
     border-radius: 7px;
     font-size: 0.4rem;

@@ -1,18 +1,15 @@
 <template>
   <Comment :comments="comment"/>
-  <Replies :reply="comment.replies"/>
 </template>
 
 <script>
 import Comment from './components/Comment.vue'
-import Replies from './components/Replies.vue'
 import getComment from '../reusable/getComment'
 
 export default {
   name: 'App',
   components: {
-    Comment,
-    Replies
+    Comment
   },
 
   setup() {
