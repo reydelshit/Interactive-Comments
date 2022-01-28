@@ -22,11 +22,9 @@
         </div>
       <!-- ================== -->
   </div>
-    <div class="comments" v-if="renderReply === comment.id">
-        <button @click="close">cclose</button>
-        <div class="comments__container">
-        <input type="text">
-        </div>
+    <div class="comments__container" v-if="renderReply === comment.id">
+        <Replies/>
+        <!-- <button @click="close">cclose</button> -->
     </div>
     <div class="replies" v-for="com in comment.replies" :key="com.id">
         <div class="replies__container">
@@ -52,10 +50,8 @@
 
      </div>
         <div class="replies__container" v-if="renderRep === com.id">
-            <button @click="closee">cclose</button>
-            <div class="comments__container">
-                <input type="text">
-            </div>
+            <!-- <button @click="closee">cclose</button> -->
+            <Replies/>
         </div>
     </div>
 </div>
@@ -64,9 +60,13 @@
 
 <script>
 // import { ref } from '@vue/reactivity'
+import Replies from '../components/Replies.vue'
 
 export default {
     props: ['comments'],
+    components: {
+        Replies
+    },
     data(){
         return{
             renderReply: null,
@@ -82,14 +82,14 @@ export default {
         close(){
             this.renderReply = !this.renderReply
         },
+        closee(){
+            this.renderRep = !this.renderRep
+        },
         replyM(w){
             if(w === w){
                 this.renderRep = w
             }
         },
-        closee(){
-            this.renderRep = !this.renderRep
-        }
     }
 }
 </script>
@@ -123,7 +123,6 @@ p{
 
 .comments{
     display: block;
-    width: 46rem;
     font-size: 0.5rem;
 }
 
@@ -131,6 +130,8 @@ p{
     display: flex;
     flex-direction: row;
     align-items: center;
+    width: 46rem;
+
     background: var(--White);
     margin-bottom: 1rem;
     padding: 1.5em;

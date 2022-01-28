@@ -1,32 +1,42 @@
 <template>
-    <div class="replies">
-        <div class="replies__container" v-for="com in repeee.replies" :key="com.id">
-            <div class="comments__upvotes">
-                <span class="upvotes__icon" @click="com.score++">+</span>
-                <span>{{com.score}}</span>
-                <span class="upvotes__icon" @click="com.score--">-</span>
-            </div> 
-        <div class="comments__descriptions">
-            <div class="comments__inside">
-                <span class="username username__replies">
-                    <img :src="require('@/assets/images/avatars/' + com.user.image.png)" alt="username-icon">
-                    <span>{{com.user.username}}</span>
-                    <span>{{com.createdAt}}</span>
-                </span>
-                <div class="reply__icon">
-                    <img src="../assets/images/icon-reply.svg" alt="reply-icon">
-                    <span>Reply</span>
-                </div>
-            </div>
-            <p>{{comment.content}}</p>
-        </div>
-        </div>
+    <div v-for="rep in reply" :key="rep">
+        <h1>{{rep.username}}</h1>
     </div>
 </template>
 
 <script>
+import { ref } from '@vue/reactivity'
+import { onMounted } from '@vue/runtime-core'
+// import { onMounted } from '@vue/runtime-core'
+
 export default {
-    props: ['repeee']
+    setup(){
+    const reply = ref([])
+    const err = ref(null)
+
+    onMounted(() => {
+        console.log(reply)
+
+
+    })
+    const fetchPost = async () => {
+      try {
+        let fetchData = await fetch('http://localhost:3000/currentUser')
+        if(!fetchData.ok){
+          throw Error('bro stfu!')
+        }
+        reply.value = await fetchData.json()
+      }
+      catch(error){
+        err.value = error.message
+      }
+    }
+    fetchPost()
+
+    return { reply, err}
+    }
+
+
 }
 </script>
 
