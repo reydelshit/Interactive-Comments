@@ -23,8 +23,12 @@
       <!-- ================== -->
   </div>
     <div class="comments__container" v-if="renderReply === comment.id">
-        <Replies/>
-        <!-- <button @click="close">cclose</button> -->
+        <Replies>
+            <template v-slot:bro>
+                <h1>{{reply.username}}</h1>
+                <img :src="require('@/assets/images/avatars/' + reply.image.png)" alt="username-icon">
+            </template>
+        </Replies>
     </div>
     <div class="replies" v-for="com in comment.replies" :key="com.id">
         <div class="replies__container">
@@ -50,8 +54,14 @@
 
      </div>
         <div class="replies__container" v-if="renderRep === com.id">
-            <!-- <button @click="closee">cclose</button> -->
-            <Replies/>
+        <Replies>
+            <template v-slot:bro>
+                <h1>{{reply.username}}</h1>
+                <img :src="require('@/assets/images/avatars/' + reply.image.png)" alt="username-icon">
+            </template>
+        </Replies>
+
+
         </div>
     </div>
 </div>
@@ -59,7 +69,6 @@
 </template>
 
 <script>
-// import { ref } from '@vue/reactivity'
 import Replies from '../components/Replies.vue'
 
 export default {
@@ -70,7 +79,8 @@ export default {
     data(){
         return{
             renderReply: null,
-            renderRep: null
+            renderRep: null,
+            reply: [],
         }
     },
     methods: {
@@ -90,7 +100,25 @@ export default {
                 this.renderRep = w
             }
         },
+    },
+    mounted(){
+
+
+    const fetchPost = async () => {
+      try {
+        let fetchData = await fetch('http://localhost:3000/currentUser')
+        if(!fetchData.ok){
+          throw Error('bro stfu!')
+        }
+        this.reply = await fetchData.json()
+      }
+      catch(error){
+        this.err = error.message
+      }
     }
+    fetchPost()
+
+  }
 }
 </script>
 
