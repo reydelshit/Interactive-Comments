@@ -2,33 +2,28 @@
   <div class="comments" v-for="comment in comments" :key="comment.id">  
     <div class="comments__container">
         <div class="comments__upvotes">
-                <span class="upvotes__icon" @click="comment.score++">+</span>
+            <span class="upvotes__icon" @click="comment.score++">+</span>
                 <span>{{comment.score}}</span>
-                <span class="upvotes__icon" @click="comment.score--">-</span>
+                    <span class="upvotes__icon" @click="comment.score--">-</span>
         </div>  
         <div class="comments__descriptions">
             <div class="comments__inside">
                 <span class="username">
                     <img :src="require('@/assets/images/avatars/' + comment.user.image.png)" alt="username-icon">
-                    <span>{{comment.user.username}}</span>
-                    <span>{{comment.createdAt}}</span>
+                        <span>{{comment.user.username}}</span>
+                            <span>{{comment.createdAt}}</span>
                 </span>
                 <div @click="replyModal(comment.id)" class="reply__icon">
                     <img src="../assets/images/icon-reply.svg" alt="reply-icon">
-                    <span>Reply</span>
+                       <span>Reply</span>
                 </div>
             </div>
-            <p>{{comment.content}}</p>
+                <p>{{comment.content}}</p>
         </div>
       <!-- ================== -->
   </div>
     <div class="comments__container" v-if="renderReply === comment.id">
-        <Replies>
-            <template v-slot:bro>
-                <h1>{{reply.username}}</h1>
-                <img :src="require('@/assets/images/avatars/' + reply.image.png)" alt="username-icon">
-            </template>
-        </Replies>
+        <Replies :com="comment" :rep="reply"/>
     </div>
     <div class="replies" v-for="com in comment.replies" :key="com.id">
         <div class="replies__container">
@@ -54,14 +49,7 @@
 
      </div>
         <div class="replies__container" v-if="renderRep === com.id">
-        <Replies>
-            <template v-slot:bro>
-                <h1>{{reply.username}}</h1>
-                <img :src="require('@/assets/images/avatars/' + reply.image.png)" alt="username-icon">
-            </template>
-        </Replies>
-
-
+            <Replies :com="com" :rep="reply"/>
         </div>
     </div>
 </div>
