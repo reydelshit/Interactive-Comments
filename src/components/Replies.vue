@@ -1,5 +1,10 @@
 <template>
-    <div class="reply__container">
+    <div class="reply__container" v-if="reply.length">
+      <div class="reply__header" v-if="replyHeaderCondition">
+        <img :src="require('@/assets/images/avatars/' + rep.image.png)" alt="username-icon">
+        <button @click="replyDelete(reply.length)">delete</button>
+        <button @click="replyEdit">edit</button>
+      </div>
       <!-- <Delete>
         <template v-slot:hays>
             delete
@@ -10,15 +15,9 @@
         <textarea type="text" v-model="reply"></textarea>
         <button @click="submitReply">Reply</button>
       </div>
-
-      <div class="reply__header" v-if="!replyInitiator">
-        <img :src="require('@/assets/images/avatars/' + rep.image.png)" alt="username-icon">
-        <button @click="replyDelete(reply.length)">delete</button>
-        <button @click="replyEdit">edit</button>
-        <h1>{{reply}}</h1>
-
-      </div>
+      <h1>{{reply}}</h1>
     </div>
+
 </template>
 
 <script>
@@ -36,12 +35,12 @@ export default {
     const reply = ref(`@${props.com.user.username} `)
     let replyHolder = []
     let replyInitiator = ref(true)
+    const replyHeaderCondition = ref(false)
 
     const submitReply = () => {
       replyHolder.value = reply.value
       replyInitiator.value = false
-      
-
+      replyHeaderCondition.value = true
       console.log(replyHolder.value)
     }
 
@@ -55,8 +54,9 @@ export default {
       reply.value = replyHolder.filter((e) => {
         return e !== id
       })
+      replyHeaderCondition.value = false
     }
-    return{ reply, submitReply, replyHolder, replyInitiator, replyEdit, replyDelete}
+    return{ reply, submitReply, replyHolder, replyInitiator, replyEdit, replyDelete, replyHeaderCondition}
   }
 
 
@@ -88,6 +88,8 @@ export default {
 .reply__container{
   padding: 1em;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .reply__content{
   display: flex;
@@ -129,5 +131,6 @@ export default {
 .reply__content button:hover{
   opacity: 0.8;
 }
+
 
 </style>

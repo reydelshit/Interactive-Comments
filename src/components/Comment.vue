@@ -22,12 +22,10 @@
         </div>
       <!-- ================== -->
   </div>
-    <div class="comments__container" v-if="renderReply === comment.id">
-        <Replies :com="comment" :rep="reply"/>
-    </div>
-    <div class="replies" v-for="com in comment.replies" :key="com.id">
-        <div class="replies__container">
-            <div class="comments__upvotes">
+        <Replies class="comments__container" :com="comment" :rep="reply" v-if="renderReply === comment.id"/>
+        <div class="replies" v-for="com in comment.replies" :key="com.id">
+            <div class="replies__container">
+             <div class="comments__upvotes">
                 <span class="upvotes__icon" @click="com.score++">+</span>
                 <span>{{com.score}}</span>
                 <span class="upvotes__icon" @click="com.score--">-</span>
@@ -48,9 +46,7 @@
         </div>
 
      </div>
-        <div class="replies__container" v-if="renderRep === com.id">
-            <Replies :com="com" :rep="reply"/>
-        </div>
+    <Replies class="replies__container" :com="com" :rep="reply" v-if="renderRep === com.id"/>
     </div>
 </div>
 
@@ -58,11 +54,14 @@
 
 <script>
 import Replies from '../components/Replies.vue'
+// import ReplyComment from './ReplyComment.vue'
 
 export default {
     props: ['comments'],
     components: {
-        Replies
+        Replies,
+        // ReplyComment
+
     },
     data(){
         return{
