@@ -1,49 +1,60 @@
 <template>
     <div class="reply__container">
-      <div class="reply__header" v-if="replyHolder.length">
-        <button @click="replyDelete(reply)">delete</button>
-        <button @click="replyEdit">edit</button>
-      </div>
-
+      <!-- <Delete>
+        <template v-slot:hays>
+            delete
+        </template>
+      </Delete> -->
       <div class="reply__content" v-if="replyInitiator">
         <img :src="require('@/assets/images/avatars/' + rep.image.png)" alt="username-icon">
         <textarea type="text" v-model="reply"></textarea>
         <button @click="submitReply">Reply</button>
       </div>
+
+      <div class="reply__header" v-if="!replyInitiator">
+        <img :src="require('@/assets/images/avatars/' + rep.image.png)" alt="username-icon">
+        <button @click="replyDelete(reply.length)">delete</button>
+        <button @click="replyEdit">edit</button>
         <h1>{{reply}}</h1>
+
+      </div>
     </div>
 </template>
 
 <script>
 import { ref } from '@vue/reactivity'
+// import Delete from './Delete.vue'
 
 export default {
 
   props: ['rep', 'com'],
-
+  components: {
+    // Delete,
+  },
   setup(props){
 
     const reply = ref(`@${props.com.user.username} `)
-    const replyHolder = ref([])
+    let replyHolder = []
     let replyInitiator = ref(true)
-
 
     const submitReply = () => {
       replyHolder.value = reply.value
       replyInitiator.value = false
+      
+
+      console.log(replyHolder.value)
     }
 
     const replyEdit = () => {
       replyInitiator.value = true
     }
 
-    const replyDelete = (id) => {
 
+    const replyDelete = (id) => {
       console.log(id)
-      replyHolder.value = replyHolder.value.filter((e) => {
+      reply.value = replyHolder.filter((e) => {
         return e !== id
       })
-        // console.log(id)
     }
     return{ reply, submitReply, replyHolder, replyInitiator, replyEdit, replyDelete}
   }
